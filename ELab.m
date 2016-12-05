@@ -397,6 +397,17 @@ classdef ELab < handle
             obj.applyActiveSet();
        end
        
+       function close(obj)
+            % Closes active connection
+            if(strcmp(obj.ComMode,'usb'))
+                obj.serialClose();
+            elseif(strcmp(obj.ComMode,'ethernet'))
+                warning('ELabWarning:CloseEthMode','The communication mode ''%s'' does not require to be closed.',obj.ComMode);
+            else
+                error('ELabError:UnknownComMode','Communication mode %s is not supported',obj.ComMode);
+            end
+       end
+       
    end
    
    methods(Access=private)
@@ -532,17 +543,6 @@ classdef ELab < handle
             fclose(obj.SerialObj);
             obj.SerialStatus = 'Closed';
             disp('Connection closed.');
-       end
-       
-       function close(obj)
-            % Closes active connection
-            if(strcmp(obj.ComMode,'usb'))
-                obj.serialClose();
-            elseif(strcmp(obj.ComMode,'ethernet'))
-                warning('ELabWarning:CloseEthMode','The communication mode ''%s'' does not require to be closed.',obj.ComMode);
-            else
-                error('ELabError:UnknownComMode','Communication mode %s is not supported',obj.ComMode);
-            end
        end
        
    end
