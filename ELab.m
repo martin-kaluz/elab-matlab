@@ -75,6 +75,7 @@ classdef ELab < handle
                     obj.ComPort = 'None';
                     obj.ActiveConfig = obj.getTargetConfig(target_name);
                     obj.initActiveSet();
+                    obj.applyDefaults();
                     obj.applyActiveSet();
                 case 'usb'
                     obj.ComMode = conn_type;
@@ -82,6 +83,7 @@ classdef ELab < handle
                     obj.ComPort = varargin{1};
                     obj.ActiveConfig = obj.getTargetConfig(target_name);
                     obj.initActiveSet();
+                    obj.applyDefaults();
                     obj.initSerialObject(obj.ComPort);
                     obj.serialConnect();
                     obj.applyActiveSet();
@@ -487,6 +489,19 @@ classdef ELab < handle
                'end_byte_out',end_byte_out ...
                );
             obj.ActiveSet = active_set_struct;                       
+       end
+       
+       function applyDefaults(obj)
+            % Applies default values to inputs
+            input_map = obj.ActiveConfig.config.IO_map.inputs;
+            fields = fieldnames(input_map);
+            obj.setBatch(1);
+            for fn = fields'
+                fname = fn{1};
+                default_val = str2double(input_map.(fname).default.Text);
+                obj.setData(fname,default_val);
+            end
+            obj.setBatch(0);
        end
        
        function initSerialObject(obj, com_port)
