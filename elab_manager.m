@@ -80,7 +80,7 @@ function elab_manager(command, varargin)
             if(exist(full_path,'dir') == 7)
                 edit([full_path filesep 'demos' filesep 'blank_ethernet']);
                 edit([full_path filesep 'demos' filesep 'blank_usb']);
-                open([full_path filesep 'library' filesep target_name '_blank.mdl']);
+                %open([full_path filesep 'library' filesep target_name '_blank.mdl']);
             else 
                 error('ELabManagerError:MissingTargetError','Error: %s not found. Use elab_manager to install and manage eLab targets.',target_name);
             end
